@@ -254,11 +254,6 @@ Trust Score computed (0–100)
 ```
 
 ---
-
-## 📎 Submission Links
-- **GitHub Repo:** *[Link]*
-- **Demo Video:** *[Link — to be added]*
-
 ---
 
 *Built for Guidewire DEVTrails 2026 — Seed. Scale. Soar. 🚀*
