@@ -160,7 +160,7 @@ All triggers are **fully automated** — no manual claim filing by the worker.
 
 ---
 
-## 5. 💡 Additional Relevant Information
+## 5. 🌍 Why This Solution Will Work in the Real World
 
 ### Why Parametric Insurance Works Here
 Traditional insurance requires manual claim filing, document submission, and long verification windows — completely unsuitable for daily-wage gig workers. Parametric insurance uses **objective external data** (weather APIs, AQI feeds) as the trigger, making payouts instant, transparent, and tamper-proof. This is the only model that realistically works for the gig economy.
@@ -173,7 +173,90 @@ Traditional insurance requires manual claim filing, document submission, and lon
 
 ---
 
+## 🛡️ Adversarial Defense & Anti-Spoofing Strategy
+
+> **Threat:** A coordinated syndicate of 500+ workers using GPS-spoofing apps to fake locations inside active weather alert zones, triggering mass false payouts and draining the liquidity pool.
+
+> **Q-Commerce Advantage:** Due to our Q-Commerce persona, GigShield has a **structural advantage** against GPS spoofing — Zepto/Blinkit workers operate from fixed dark stores within a 2–5 km hyperlocal radius. Dark store proximity validation makes location fraud significantly harder to execute compared to food delivery workers who roam freely across a city. Our defense strategy builds on this inherent advantage.
+
+---
+
+### 1. Differentiating a Genuine Stranded Worker vs. a Bad Actor
+
+GPS coordinates alone are **never trusted**. GigShield uses a **multi-signal corroboration engine** — a claim is only considered genuine when multiple independent signals agree.
+
+| Signal | Genuine Worker | Spoofer |
+|---|---|---|
+| **Platform activity** | Order attempts made, then failed/cancelled during disruption | Zero order attempts — no engagement with the platform at all |
+| **Device sensor data** | Accelerometer shows stationary/low-movement pattern consistent with being stuck | Spoofing apps run on idle phones — no realistic motion signature |
+| **Network triangulation** | Cell tower + WiFi signals place device in the claimed zone | GPS says Zone A, but cell towers resolve to a different location |
+| **Battery & signal behavior** | Fluctuating signal strength consistent with bad weather | Clean, stable signal — inconsistent with a Red Alert zone |
+| **Historical zone presence** | Worker has previously operated in this zone on normal days | Worker has never historically operated in the claimed zone |
+
+The AI model computes a **Trust Score (0–100)** by combining all signals. A claim only auto-approves at Trust Score ≥ 75.
+
+---
+
+### 2. Data Points Used to Detect a Coordinated Fraud Ring
+
+Beyond GPS, the system analyzes:
+
+- **Claim burst detection:** If 20+ claims originate from the same zone within a 10-minute window, the system flags it as a potential coordinated event and pauses auto-approval for that batch
+- **Telegram/social signal correlation:** Sudden claim spikes that correlate with no verified API trigger (weather, AQI) are flagged — genuine disruptions always have an API footprint
+- **Device fingerprinting:** Multiple claims from the same physical device (shared phones within a syndicate) are flagged as duplicates regardless of different worker IDs
+- **Velocity analysis:** Workers who file claims in zones they have never delivered in before score low on the historical zone presence check
+- **Network graph analysis:** If a cluster of workers all registered within the same 48-hour window AND all file claims simultaneously, the system treats them as a correlated group and escalates to manual review
+- **Platform cross-check:** Zepto/Blinkit platform API (simulated) is queried — if the platform shows the worker accepted or completed orders during the alleged disruption window, the claim is auto-rejected
+
+---
+
+### 3. UX Balance — Handling Flagged Claims Without Penalizing Honest Workers
+
+A genuine worker in a Red Alert zone may have poor network, low battery, and no platform activity — which could look suspicious. The system handles this through a **3-tier response model:**
+
+**Tier 1 — Auto-Approved (Trust Score ≥ 75)**
+All signals align. Payout processed instantly. No friction for the worker.
+
+**Tier 2 — Soft Flag (Trust Score 50–74)**
+Worker receives an in-app notification:
+> *"Your claim is under a quick review. This usually resolves in under 2 hours. No action needed from you."*
+- A lightweight secondary check runs: the system waits for the disruption event to end, then cross-checks platform re-engagement (did the worker resume deliveries after the disruption lifted?)
+- If re-engagement is confirmed → claim approved, payout released
+- Worker is never asked to "prove" they were stuck — the system finds proof passively
+
+**Tier 3 — Hard Flag (Trust Score < 50)**
+Claim goes to manual review queue with full signal report for the admin.
+- Worker notified with transparency:
+> *"We need a little more time to verify your claim. You will hear back within 24 hours."*
+- If the worker is genuine and frustrated, they can raise a dispute via a one-tap in-app button — no long forms
+- Repeated false claims from the same worker ID permanently lower their Trust Score baseline
+
+**The core principle:** Honest workers are never asked to do more work. The burden of proof is on the system, not the worker. Fraud is caught passively through data, not through interrogating every claimant.
+
+---
+
+### Anti-Spoofing Architecture Summary
+
+```
+Claim Initiated (auto or manual)
+         ↓
+Multi-Signal Trust Engine
+  ├── Platform activity check     (Zepto/Blinkit API)
+  ├── Device sensor corroboration (accelerometer + network)
+  ├── Cell tower triangulation    (vs. GPS claim)
+  ├── Historical zone presence    (worker's past delivery zones)
+  └── Syndicate graph analysis    (burst detection + device fingerprint)
+         ↓
+Trust Score computed (0–100)
+  ├── ≥ 75 → Auto-approve → Instant UPI payout
+  ├── 50–74 → Soft flag → Passive re-engagement check → Approve/Escalate
+  └── < 50 → Hard flag → Manual review queue → 24hr resolution
+```
+
+---
+
 ## 📎 Submission Links
+- **GitHub Repo:** *[Link]*
 - **Demo Video:** *[Link — to be added]*
 
 ---
